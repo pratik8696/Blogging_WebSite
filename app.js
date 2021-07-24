@@ -20,9 +20,18 @@ app.get("/",function(req,res){
   res.render('home',{para_one:homeStartingContent});
 });
 
+app.get("/about",function(req,res){
+  res.render('about',{para_two:aboutContent});
+});
+
+app.get("/contact",function(req,res){
+  res.render('contact',{para_three:contactContent});
+});
 
 
-
+app.get("/compose",function(req,res){
+  res.render('compose');
+});
 
 
 
