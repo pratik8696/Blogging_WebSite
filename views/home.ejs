@@ -3,4 +3,9 @@
 <h1>Home</h1>
 <p><%=para_one%></p>
 
+<%  posts.forEach(function(posts){ %>
+<h1><%= posts.postTitle %></h1>
+<p><%= posts.postBody %></p>
+<%  }); %>
+
 <%-include("partials/footer")-%>

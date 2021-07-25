@@ -2,8 +2,17 @@
 <%-include("partials/header")-%>
 
 <h1>Compose</h1>
-<form action="/" method="post">
-<input type="text" name="text_input" placeholder="Enter the text here" />
-<button type="submit">Publish</button>
+
+<form action="/compose" method="post">
+  <div class="mb-3">
+  <label class="form-label">Title</label><br>
+<input class="form-control" type="text" name="title_text_input" placeholder="Enter the text here" /><br>
+</div>
+<div class="mb-3">
+<label class="form-label">Post</label><br>
+<textarea placeholder="Enter your text here" name="post_text_input" class="form-control" rows="3"></textarea>
+<br>
+</div>
+<button type="submit" class="btn-primary">Publish</button><br>
 </form>
 <%-include("partials/footer")-%>
