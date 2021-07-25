@@ -2,6 +2,7 @@
 
 const express = require("express");
 const bodyParser = require("body-parser");
+var _ = require('lodash');
 const ejs = require("ejs");
 
 
@@ -21,6 +22,17 @@ app.use(bodyParser.urlencoded({
 app.use(express.static("public"));
 
 let posts = [];
+
+function truncateText(selector) {
+var maxLength=100;
+    var element = document.querySelector(selector),
+        truncated = element.innerText;
+
+    if (truncated.length > maxLength) {
+        truncated = truncated.substr(0,maxLength) + '...';
+    }
+    return truncated;
+}
 
 app.get("/", function(req, res) {
   res.render('home', {
@@ -47,18 +59,20 @@ app.get("/compose", function(req, res) {
 });
 
 app.get("/posts/:topic", function(req, res) {
-  console.log(req.params.topic);
-  var requestedPost = req.params.topic;
+  console.log(_.lowerCase(req.params.topic));
+  var requestedPost = _.lowerCase(req.params.topic);
   posts.forEach(function(post) {
-    var currentPost=post.postTitle;
+    var currentPost=_.lowerCase(post.postTitle);
     if(currentPost===requestedPost)
     {
       console.log("Match Found");
+      res.render("blogpage",{title:post.postTitle,body:post.postBody});
     }
     else
     {
       console.log("Match not found");
     }
+
   });
 
 });
