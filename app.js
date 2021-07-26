@@ -23,17 +23,6 @@ app.use(express.static("public"));
 
 let posts = [];
 
-function truncateText(selector) {
-var maxLength=100;
-    var element = document.querySelector(selector),
-        truncated = element.innerText;
-
-    if (truncated.length > maxLength) {
-        truncated = truncated.substr(0,maxLength) + '...';
-    }
-    return truncated;
-}
-
 app.get("/", function(req, res) {
   res.render('home', {
     para_one: homeStartingContent,
@@ -92,6 +81,6 @@ app.post("/compose", function(req, res) {
 
 
 
-app.listen(3000, function() {
+app.listen(3000||process.env.PORT, function() {
   console.log("Server started on port 3000");
 });
