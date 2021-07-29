@@ -1,4 +1,5 @@
 //jshint esversion:6
+const mongoose=require('mongoose');
 const express = require("express");
 const bodyParser = require("body-parser");
 var _ = require('lodash');
@@ -17,13 +18,21 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(express.static("public"));
 
-let posts = [];
+mongoose.connect("mongodb+srv://new-user:test123@cluster0.pqa3i.mongodb.net/blogDB", {useNewUrlParser: true});
+
+const blogschema=new mongoose.Schema({
+  title:String,
+  content:String
+});
+const Blog=mongoose.model("blog",blogschema);
 
 app.get("/", function(req, res) {
-  res.render('home', {
-    para_one: homeStartingContent,
-    posts: posts
-  });
+    Blog.find({},function(err,result){
+        res.render('home', {
+          para_one: homeStartingContent,
+          postss:result
+      });
+    });
 });
 
 app.get("/about", function(req, res) {
@@ -46,31 +55,40 @@ app.get("/compose", function(req, res) {
 app.get("/posts/:topic", function(req, res) {
   console.log(_.lowerCase(req.params.topic));
   var requestedPost = _.lowerCase(req.params.topic);
-  posts.forEach(function(post) {
-    var currentPost=_.lowerCase(post.postTitle);
-    if(currentPost===requestedPost)
-    {
-      console.log("Match Found");
-      res.render("blogpage",{title:post.postTitle,body:post.postBody});
-    }
-    else
-    {
-      console.log("Match not found");
-    }
+  Blog.find({},function(err,result){
 
+      result.forEach(function(post) {
+        var currentPost=_.lowerCase(post.title);
+        if(currentPost===requestedPost)
+        {
+          console.log("Match Found");
+          res.render("blogpage",{title:post.title,body:post.content});
+        }
+        else
+        {
+          console.log("Match not found");
+        }
+});
   });
 
 });
 
 app.post("/compose", function(req, res) {
-  let post = {
-    postTitle: req.body.title_text_input,
-    postBody: req.body.post_text_input
-  }
-  posts.push(post);
+  const blog_post=new Blog({
+    title:req.body.title_text_input,
+    content:req.body.post_text_input
+  });
+
+  blog_post.save(function(err){
+    if(err){
+      res.redirect("/");
+    }
+  });
+
   res.redirect("/");
 });
 
-app.listen(process.env.PORT, function() {
+
+app.listen(process.env.PORT || 3000, function() {
   console.log("Server started on port 3000");
 });
