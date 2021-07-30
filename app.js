@@ -18,7 +18,7 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(express.static("public"));
 
-mongoose.connect("mongodb+srv://new-user:test123@cluster0.pqa3i.mongodb.net/blogDB", {useNewUrlParser: true});
+mongoose.connect("get your own mongodb Atlas server", {useNewUrlParser: true});
 
 const blogschema=new mongoose.Schema({
   title:String,
